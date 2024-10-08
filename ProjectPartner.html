@@ -16,7 +16,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#Project" onclick="showSection('project-section')">Project</a></li>
+                    <li><a href="#Project" onclick="showSection('project-home')">Project</a></li>
                     <li><a href="#Chat" onclick="showSection('chat-section')">Chat</a></li>
                     <li><a href="#Person" onclick="showSection('person-section')">Person</a></li>
                 </ul>
@@ -24,9 +24,17 @@
         </div>
     </header>
 
-    <!-- 项目部分 -->
-    <div id="project-section" class="section">
+    <!-- 项目主页部分 -->
+    <div id="project-home" class="section">
         <h2>Project Section</h2>
+        <p>Select an option:</p>
+        <button onclick="showSection('publish-project-section')">Publish a Project</button>
+        <button onclick="showSection('search-project-section')">Search for a Project</button>
+    </div>
+
+    <!-- 发布项目部分 -->
+    <div id="publish-project-section" class="section" style="display:none;">
+        <h2>Publish a Project</h2>
         <h3>Create Your Project</h3>
         <form>
             Project Name: <input type="text" id="projectName"><br>
@@ -51,6 +59,28 @@
                 <!-- 动态添加项目的行 -->
             </tbody>
         </table>
+        <button onclick="showSection('project-home')">Back to Project Home</button>
+    </div>
+
+    <!-- 搜索项目部分 -->
+    <div id="search-project-section" class="section" style="display:none;">
+        <h2>Search for a Project</h2>
+        <h3>Available Projects</h3>
+        <table id="searchProjectsTable">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Project Mentor</th>
+                    <th>Research Direction</th>
+                    <th>Joined/Max</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 动态添加可加入的项目的行 -->
+            </tbody>
+        </table>
+        <button onclick="showSection('project-home')">Back to Project Home</button>
     </div>
 
     <!-- 聊天部分 -->
