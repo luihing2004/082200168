@@ -8,6 +8,9 @@ function showSection(sectionId) {
     selectedSection.style.display = 'block';
 }
 
+// 存储已申请的项目
+var joinedProjects = [];
+
 // 创建新项目并添加到发布项目表格
 function createProject() {
     var projectName = document.getElementById('projectName').value;
@@ -17,7 +20,7 @@ function createProject() {
 
     if (projectName && projectMentor && researchDirection && joinedMax) {
         var table = document.getElementById('projectsTable').getElementsByTagName('tbody')[0];
-        
+
         // 创建新行
         var newRow = table.insertRow();
 
@@ -28,7 +31,7 @@ function createProject() {
 
         // 创建操作按钮：编辑和删除
         var actionCell = newRow.insertCell(4);
-        
+
         var editButton = document.createElement("button");
         editButton.innerText = "Edit";
         editButton.onclick = function() {
@@ -40,6 +43,7 @@ function createProject() {
         deleteButton.innerText = "Delete";
         deleteButton.onclick = function() {
             table.deleteRow(newRow.rowIndex - 1);
+            loadProjectsForSearch(); // 删除项目后更新搜索项目列表
         };
         actionCell.appendChild(deleteButton);
 
@@ -49,20 +53,19 @@ function createProject() {
         document.getElementById('researchDirection').value = '';
         document.getElementById('joinedMax').value = '';
 
-        // 调用更新搜索项目表格的函数
-        loadProjectsForSearch();
+        // 更新搜索项目列表
+        loadProjectsForSearch(); // 新增这一行
     } else {
         alert("Please fill in all fields!");
     }
 }
-
 
 // 在搜索项目页面显示可加入的项目
 function loadProjectsForSearch() {
     var projectsTable = document.getElementById('projectsTable').getElementsByTagName('tbody')[0];
     var searchProjectsTable = document.getElementById('searchProjectsTable').getElementsByTagName('tbody')[0];
 
-    searchProjectsTable.innerHTML = '';  // 清空之前的数据
+    searchProjectsTable.innerHTML = ''; // 清空之前的数据
 
     for (var i = 0; i < projectsTable.rows.length; i++) {
         var projectName = projectsTable.rows[i].cells[0].innerText;
@@ -82,11 +85,100 @@ function loadProjectsForSearch() {
         // 申请加入按钮
         var joinButton = document.createElement("button");
         joinButton.innerText = "Apply to Join";
-        joinButton.onclick = function() {
-            alert("Applied to join " + projectName);
-        };
+        joinButton.onclick = (function(pName) {
+            return function() {
+                applyToJoin(pName);
+            };
+        })(projectName);
         actionCell.appendChild(joinButton);
     }
+}
+
+// 申请加入项目
+function applyToJoin(projectName) {
+    if (!joinedProjects.includes(projectName)) {
+        joinedProjects.push(projectName);
+        updateJoinedProjectsList();
+        alert("Applied to join " + projectName);
+    } else {
+        alert("You have already applied to join " + projectName);
+    }
+}
+
+// 更新已申请项目的列表
+function updateJoinedProjectsList() {
+    var joinedProjectsList = document.getElementById('joinedProjectsList');
+    joinedProjectsList.innerHTML = ''; // 清空列表
+
+    joinedProjects.forEach(function(project) {
+        var li = document.createElement('li');
+        li.innerText = project;
+
+        // 添加退出按钮
+        var leaveButton = document.createElement('button');
+        leaveButton.innerText = 'Leave';
+        leaveButton.onclick = function() {
+            leaveProject(project);
+        };
+        li.appendChild(leaveButton);
+
+        // 点击项目名称切换聊天窗口
+        li.onclick = function() {
+            openChatWindow(project);
+        };
+
+        joinedProjectsList.appendChild(li);
+    });
+}
+
+// 离开项目
+function leaveProject(projectName) {
+    var index = joinedProjects.indexOf(projectName);
+    if (index !== -1) {
+        joinedProjects.splice(index, 1);
+        updateJoinedProjectsList();
+        closeChatWindow();
+    }
+}
+
+// 打开聊天窗口
+function openChatWindow(projectName) {
+    document.getElementById('currentProjectName').innerText = projectName;
+    document.getElementById('sendMessageBtn').disabled = false;
+
+    // 清空之前的聊天记录
+    document.getElementById('chatMessages').innerHTML = '';
+
+    // 示例：添加一条欢迎消息
+    addChatMessage("Welcome to the " + projectName + " chat!");
+}
+
+// 关闭聊天窗口
+function closeChatWindow() {
+    document.getElementById('currentProjectName').innerText = "Select a project to chat";
+    document.getElementById('sendMessageBtn').disabled = true;
+
+    // 清空聊天记录
+    document.getElementById('chatMessages').innerHTML = '';
+}
+
+// 发送消息
+document.getElementById('sendMessageBtn').onclick = function() {
+    var messageInput = document.getElementById('chatInput');
+    var message = messageInput.value.trim();
+    if (message) {
+        addChatMessage(message);
+        messageInput.value = ''; // 清空输入框
+    }
+};
+
+// 添加聊天消息
+function addChatMessage(message) {
+    var chatMessages = document.getElementById('chatMessages');
+    var messageElement = document.createElement('div');
+    messageElement.innerText = message;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // 滚动到最后一条消息
 }
 
 // 修改项目
@@ -145,6 +237,7 @@ function saveEditedProject(row) {
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
         row.parentNode.removeChild(row); // 删除行
+        loadProjectsForSearch(); // 删除项目后更新搜索项目列表
     };
     actionCell.appendChild(deleteButton);
 }
@@ -171,6 +264,7 @@ function cancelEditProject(row, projectName, projectMentor, researchDirection, j
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
         row.parentNode.removeChild(row); // 删除行
+        loadProjectsForSearch(); // 删除项目后更新搜索项目列表
     };
     actionCell.appendChild(deleteButton);
 }

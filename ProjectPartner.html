@@ -87,8 +87,21 @@
     <div id="chat-section" class="section" style="display:none;">
         <h2>Chat Section</h2>
         <h3>Real-Time Chat</h3>
-        <input type="text" placeholder="Type a message">
-        <button>Send</button>
+        
+        <div class="chat-container">
+            <div class="project-list">
+                <h4>Joined Projects</h4>
+                <ul id="joinedProjectsList">
+                    <!-- 动态添加已申请项目的列表 -->
+                </ul>
+            </div>
+            <div class="chat-window">
+                <h4 id="currentProjectName">Select a project to chat</h4>
+                <div id="chatMessages"></div>
+                <input type="text" id="chatInput" placeholder="Type a message">
+                <button id="sendMessageBtn" disabled>Send</button>
+            </div>
+        </div>
     </div>
 
     <!-- 个人信息部分 -->

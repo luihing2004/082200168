@@ -87,3 +87,26 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+/* 聊天样式 */
+.chat-container {
+    display: flex;
+}
+
+.project-list {
+    width: 200px; /* 左侧项目列表的宽度 */
+    border-right: 1px solid #ddd;
+    padding-right: 10px;
+}
+
+.chat-window {
+    flex-grow: 1; /* 右侧聊天窗口占用剩余空间 */
+    padding-left: 10px;
+}
+
+#chatMessages {
+    border: 1px solid #ddd;
+    height: 300px; /* 设置聊天消息框的高度 */
+    overflow-y: scroll; /* 允许垂直滚动 */
+    margin-bottom: 10px;
+}
