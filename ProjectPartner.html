@@ -24,6 +24,47 @@
         </div>
     </header>
 
+    <!-- 项目部分 -->
+    <div id="project-section" class="section">
+        <h2>Project Section</h2>
+        <h3>Create Your Project</h3>
+        <form>
+            Project Title: <input type="text" id="projectTitle"><br>
+            Description: <input type="text" id="projectDescription"><br>
+            Requirements: <input type="text" id="projectRequirements"><br>
+            <button type="button" onclick="createProject()">Create Project</button>
+        </form>
+        
+        <h3>Available Projects</h3>
+        <table id="projectsTable">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Project Mentor</th>
+                    <th>Research Direction</th>
+                    <th>Joined/Max</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 动态添加项目的行 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 聊天部分 -->
+    <div id="chat-section" class="section" style="display:none;">
+        <h2>Chat Section</h2>
+        <h3>Real-Time Chat</h3>
+        <input type="text" placeholder="Type a message">
+        <button>Send</button>
+    </div>
+
+    <!-- 个人信息部分 -->
+    <div id="person-section" class="section" style="display:none;">
+        <h2>Person Section</h2>
+        
+    </div>
 
     <script src="script.js"></script> <!-- 引入外部JavaScript文件 -->
 </body>
