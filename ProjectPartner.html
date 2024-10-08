@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectPartner</title>
-    <link rel="stylesheet" href="styles.css"> <!-- 引入外部CSS文件 -->
+    <link rel="stylesheet" href="styles.css"> <!-- 引入CSS文件 -->
 </head>
 <body>
     <!-- 导航栏 -->
@@ -29,9 +29,10 @@
         <h2>Project Section</h2>
         <h3>Create Your Project</h3>
         <form>
-            Project Title: <input type="text" id="projectTitle"><br>
-            Description: <input type="text" id="projectDescription"><br>
-            Requirements: <input type="text" id="projectRequirements"><br>
+            Project Name: <input type="text" id="projectName"><br>
+            Project Mentor: <input type="text" id="projectMentor"><br>
+            Research Direction: <input type="text" id="researchDirection"><br>
+            Joined/Max: <input type="text" id="joinedMax"><br>
             <button type="button" onclick="createProject()">Create Project</button>
         </form>
         
@@ -63,9 +64,22 @@
     <!-- 个人信息部分 -->
     <div id="person-section" class="section" style="display:none;">
         <h2>Person Section</h2>
-        
+        <form id="personalInfoForm">
+            Name: <input type="text" id="name"><br>
+            Student ID: <input type="text" id="studentID"><br>
+            Major: <input type="text" id="major"><br>
+            <button type="button" onclick="savePersonalInfo()">Save Info</button>
+        </form>
+        <div id="personalInfoDisplay" style="display:none;">
+            <h3>Your Information</h3>
+            <p><strong>Name:</strong> <span id="displayName"></span></p>
+            <p><strong>Student ID:</strong> <span id="displayStudentID"></span></p>
+            <p><strong>Major:</strong> <span id="displayMajor"></span></p>
+            <button type="button" onclick="editPersonalInfo()">Edit</button>
+            <button type="button" onclick="deletePersonalInfo()">Delete</button>
+        </div>
     </div>
 
-    <script src="script.js"></script> <!-- 引入外部JavaScript文件 -->
+    <script src="script.js"></script> <!-- 引入JavaScript文件 -->
 </body>
 </html>
