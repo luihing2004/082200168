@@ -65,31 +65,52 @@ function loadProjectsForSearch() {
     var projectsTable = document.getElementById('projectsTable').getElementsByTagName('tbody')[0];
     var searchProjectsTable = document.getElementById('searchProjectsTable').getElementsByTagName('tbody')[0];
 
-    searchProjectsTable.innerHTML = ''; // 清空之前的数据
+    searchProjectsTable.innerHTML = '';  // 清空之前的数据
 
     for (var i = 0; i < projectsTable.rows.length; i++) {
         var projectName = projectsTable.rows[i].cells[0].innerText;
         var projectMentor = projectsTable.rows[i].cells[1].innerText;
         var researchDirection = projectsTable.rows[i].cells[2].innerText;
-        var joinedMax = projectsTable.rows[i].cells[3].innerText;
+        var joinedMax = projectsTable.rows[i].cells[3].innerText.split("/");  // 分割成 [joined, max]
+
+        var joined = parseInt(joinedMax[0]);
+        var max = parseInt(joinedMax[1]);
 
         var newRow = searchProjectsTable.insertRow();
 
         newRow.insertCell(0).innerText = projectName;
         newRow.insertCell(1).innerText = projectMentor;
         newRow.insertCell(2).innerText = researchDirection;
-        newRow.insertCell(3).innerText = joinedMax;
+        newRow.insertCell(3).innerText = `${joined}/${max}`;
 
         var actionCell = newRow.insertCell(4);
 
         // 申请加入按钮
         var joinButton = document.createElement("button");
         joinButton.innerText = "Apply to Join";
-        joinButton.onclick = (function(pName) {
+
+        // 如果已经满员，则禁用按钮
+        if (joined >= max) {
+            joinButton.innerText = "Full";
+            joinButton.disabled = true;
+        }
+
+        joinButton.onclick = (function(joinButton, newRow, joined, max) {
             return function() {
-                applyToJoin(pName);
+                if (joined < max) {
+                    joined += 1;  // 加入人数加1
+                    newRow.cells[3].innerText = `${joined}/${max}`;  // 更新joined/max
+
+                    // 更新按钮为 "Already Joined"
+                    joinButton.innerText = "Already Joined";
+                    joinButton.disabled = true;
+
+                    // 更新已申请项目列表
+                    applyToJoin(newRow.cells[0].innerText); // 加入项目后更新已申请项目
+                }
             };
-        })(projectName);
+        })(joinButton, newRow, joined, max);
+
         actionCell.appendChild(joinButton);
     }
 }
@@ -114,7 +135,7 @@ function updateJoinedProjectsList() {
         var li = document.createElement('li');
         li.innerText = project;
 
-        // 添加退出按钮
+        // 添加离开按钮
         var leaveButton = document.createElement('button');
         leaveButton.innerText = 'Leave';
         leaveButton.onclick = function() {
@@ -138,6 +159,7 @@ function leaveProject(projectName) {
         joinedProjects.splice(index, 1);
         updateJoinedProjectsList();
         closeChatWindow();
+        loadProjectsForSearch(); // 更新搜索项目列表
     }
 }
 
@@ -236,13 +258,13 @@ function saveEditedProject(row) {
     var deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
-        row.parentNode.removeChild(row); // 删除行
+        document.getElementById('projectsTable').deleteRow(row.rowIndex - 1);
         loadProjectsForSearch(); // 删除项目后更新搜索项目列表
     };
     actionCell.appendChild(deleteButton);
 }
 
-// 取消编辑项目，恢复原始值
+// 取消编辑
 function cancelEditProject(row, projectName, projectMentor, researchDirection, joinedMax) {
     row.cells[0].innerText = projectName;
     row.cells[1].innerText = projectMentor;
@@ -263,7 +285,7 @@ function cancelEditProject(row, projectName, projectMentor, researchDirection, j
     var deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
-        row.parentNode.removeChild(row); // 删除行
+        document.getElementById('projectsTable').deleteRow(row.rowIndex - 1);
         loadProjectsForSearch(); // 删除项目后更新搜索项目列表
     };
     actionCell.appendChild(deleteButton);

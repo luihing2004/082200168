@@ -48,6 +48,30 @@ nav ul li a {
     text-decoration: none;
 }
 
+/* 添加欢迎容器的样式 */
+.welcome-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.welcome-container h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.welcome-container p {
+    font-size: 18px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.welcome-image {
+    margin-top: 20px;
+    width: 450px; /* 设置图片大小 */
+    height: auto;
+    border-radius: 10px;
+}
+
 /* Section visibility control */
 .section {
     display: none; /* 隐藏所有section，后面用JS显示 */
